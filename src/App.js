@@ -9,6 +9,7 @@ import RegisterClient from './pages/RegisterClient';
 import RegisterAccountManager from './pages/RegisterAccountManager';
 
 import { StaffPortal } from './pages/StaffPortal';
+import { ClientPortal }  from './pages/ClientPortal';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='/register/accountmanager' element={<RegisterAccountManager />} />
 
         <Route path='/staffportal' element={<StaffPortal />} />
+        <Route path='/clientportal' element={<ClientPortal />} />
       
       </Routes>
     </Router>

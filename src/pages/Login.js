@@ -1,61 +1,57 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import API_ENDPOINT from './appConfig';
 
 import 'tailwindcss/tailwind.css';
 
-export default class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            password: '',
-            response: null,
-        };
-    }
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [response, setResponse] = useState(null);
+    const navigate = useNavigate();
 
-    handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const { email, password } = this.state;
-            const requestBody = {
-                email: email,
-                password: password,
-            };
+            const requestBody = { email, password };
+            const response = await axios.post(`${API_ENDPOINT}/login`, requestBody);
 
-            // Replace 'your_api_endpoint_here' with your actual API endpoint
-            const response = await axios.post(
-                `${API_ENDPOINT}/login`,
-                requestBody
-            );
-
-            // Handle the response here
-            this.setState({ response: response.data });
+            if (response.data.accessToken) {
+                sessionStorage.setItem('accessToken', response.data.accessToken);
+                fetchUserDetails(response.data.accessToken);
+            } else {
+                setResponse('Login failed. Please try again.');
+            }
         } catch (error) {
-            // Handle any errors here
             console.error(error);
+            setResponse(error.message);
         }
     };
 
-    handleEmailChange = (e) => {
-        this.setState({ email: e.target.value });
+    const fetchUserDetails = async (accessToken) => {
+        try {
+            const config = { headers: { Authorization: `Bearer ${accessToken}` } };
+            const userInfoResponse = await axios.get(`${API_ENDPOINT}/api/User/GetUserInfo`, config);
+
+            sessionStorage.setItem('userId', userInfoResponse.data.userId);
+            sessionStorage.setItem('role', userInfoResponse.data.role);
+
+            userInfoResponse.data.role === "Client" ? navigate('/clientportal') : navigate('/staffportal');
+        } catch (error) {
+            console.error("Error fetching user details", error);
+            setResponse(error.message);
+        }
     };
 
-    handlePasswordChange = (e) => {
-        this.setState({ password: e.target.value });
-    };
-
-    render() {
-        const { email, password, response } = this.state;
-
-        return (
-            <div className="flex min-h-screen items-center justify-center">
+    return (
+        <div className="flex min-h-screen items-center justify-center">
                 <div className="relative flex flex-col rounded-xl bg-transparent bg-clip-border text-gray-700 shadow-none">
                     <h4 className="block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
                         Sign In
                     </h4>
-                    <form onSubmit={this.handleSubmit} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+                    <form onSubmit={handleSubmit} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
                         <div className="mb-4 flex flex-col gap-6">
                             <div className="relative h-11 w-full min-w-[200px]">
                                 <input
@@ -64,7 +60,7 @@ export default class Login extends Component {
                                     name="email"
                                     type="email"
                                     value={email}
-                                    onChange={this.handleEmailChange}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <label className="font-normal text-blue-gray-400 transition-all">
                                     Email
@@ -77,7 +73,7 @@ export default class Login extends Component {
                                     id="password"
                                     name="password"
                                     value={password}
-                                    onChange={this.handlePasswordChange}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <label className="font-normal text-blue-gray-400 transition-all">
                                     Password
@@ -106,8 +102,8 @@ export default class Login extends Component {
                     href="https://unpkg.com/@material-tailwind/html@latest/styles/material-tailwind.css"
                 />
                 <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"></script>
-            </div>         
-        );
-    }
-}
+            </div>   
+    );
+};
 
+export default Login;
