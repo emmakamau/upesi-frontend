@@ -5,6 +5,7 @@ import API_ENDPOINT from '../pages/appConfig'
 import Label from './Label';
 import Input from './Input';
 import SubmitButton from './SubmitButton';
+import DropDown from './DropDown';
 
 const transactionFeeStructure = [
     { min: 0, max: 1000, fee: 10 },
@@ -89,15 +90,12 @@ class TransferCash extends Component {
                 <form onSubmit={this.handleSubmit}>
                     <div className='p-1'>
                         <Label name="Transfer To" />
-                        <select
-                            className="peer h-full w-full rounded-md border border-blue-gray-200 bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-grey-800 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                        <DropDown 
                             name="transferTo"
                             value={transferTo}
                             onChange={this.handleInputChange}
-                            required>
-                            <option value="">Select a recipient</option>
-                            {this.renderTransferToOptions()}
-                        </select>
+                            options={transferToOptions}
+                            placeholder="Select a recipient"/>
                     </div>
                     <div className='p-1'>
                         <Label name="Description" />
