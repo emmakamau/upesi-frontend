@@ -8,17 +8,17 @@ import SubmitButton from './SubmitButton';
 import DropDown from './DropDown';
 
 const transactionFeeStructure = [
-    { min: 0, max: 1000, fee: 10 },
-    { min: 1001, max: 5000, fee: 20 },
-    { min: 5001, max: 10000, fee: 30 },
-    { min: 10001, max: 50000, fee: 40 },
-    { min: 50001, max: 1000000000000, fee: 50 }
+    { min: 0, max: 1000, fee: 20 },
+    { min: 1001, max: 5000, fee: 30 },
+    { min: 5001, max: 10000, fee: 40 },
+    { min: 10001, max: 50000, fee: 50 },
+    { min: 50001, max: 1000000000000, fee: 60 }
 ];
 
-class TransferCash extends Component {
+class WithdrawAtm extends Component {
     state = {
-        transferToOptions: [],  // Options for the transferTo dropdown
-        transferTo: '',
+        atmList: [],
+        atmId: '',
         description: '',
         amount: 0,
         transactionFee: 0,
@@ -32,10 +32,10 @@ class TransferCash extends Component {
     fetchTransferToOptions = async () => {
         try {
             // API endpoint to fetch transferTo options
-            const response = await axios.post(`${API_ENDPOINT}/api/SavingsAccount/ListSavingsAccounts`);
+            const response = await axios.post(`${API_ENDPOINT}/api/Atm/ListAtms`);
             this.setState({ transferToOptions: response.data });
         } catch (error) {
-            console.error("Error fetching transfer options:", error);
+            console.error("Error fetching ATMs", error);
         }
     };
 
@@ -56,13 +56,13 @@ class TransferCash extends Component {
 
     handleSubmit = async (e) => {
         e.preventDefault();
-        const { transferTo, description, amount, transactionFee } = this.state;
-        const transferFrom = sessionStorage.getItem('userId');
+        const { atmId, description, amount, transactionFee } = this.state;
+        const userId = sessionStorage.getItem('userId');
 
         try {
-            const response = await axios.post(`${API_ENDPOINT}/api/Transactions/BankTransfer`, {
-                transferFrom,
-                transferTo,
+            const response = await axios.post(`${API_ENDPOINT}/api/Transactions/WithdrawFromAtm`, {
+                atmId,
+                userId,
                 description,
                 amount: Number(amount),
                 transactionFee
@@ -75,27 +75,27 @@ class TransferCash extends Component {
         }
     };
 
-    renderTransferToOptions = () => {
-        return this.state.transferToOptions.map((option, index) => (
+    renderAtmOptions = () => {
+        return this.state.atmList.map((option, index) => (
             <option key={index} value={option.value}>{option.label}</option>
         ));
     };
 
     render() {
-        const { transferTo, description, amount } = this.state;
+        const { atmList, description, amount } = this.state;
 
         return (
             <div className=''>
-                <h2 className='text-center font-bold mb-2'>Transfer Funds</h2>
+                <h2 className='text-center font-bold mb-2'>ATM Withdrawal</h2>
                 <form onSubmit={this.handleSubmit}>
                     <div className='p-1'>
-                        <Label name="Transfer To" />
+                        <Label name="ATMs" />
                         <DropDown 
-                            name="transferTo"
-                            value={transferTo}
+                            name="atmList"
+                            value={atmList}
                             onChange={this.handleInputChange}
-                            options={this.renderTransferToOptions()}
-                            placeholder="Select a recipient"/>
+                            options={this.renderAtmOptions()}
+                            placeholder="Select an ATM"/>
                     </div>
                     <div className='p-1'>
                         <Label name="Description" />
@@ -112,11 +112,11 @@ class TransferCash extends Component {
                             onChange={this.handleInputChange}
                             required></Input>
                     </div>
-                    <SubmitButton name="Transfer" />
+                    <SubmitButton name="Withdraw" />
                 </form>
             </div>
         );
     }
 }
 
-export default TransferCash;
+export default WithdrawAtm;

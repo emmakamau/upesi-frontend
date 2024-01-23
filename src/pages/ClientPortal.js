@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 
 import { Navbar } from "../components/Navbar";
-import  TransferCash from "../components/TransferCash";
+import TransferCash from "../components/TransferCash";
+import WithdrawAtm from "../components/WithdrawAtm";
 
 export class ClientPortal extends Component {
     render() {
@@ -10,6 +11,7 @@ export class ClientPortal extends Component {
                 <Navbar />
                 <div className="main-content h-screen">
                     <TransferCash />
+                    <WithdrawAtm />
                 </div>
             </div>
         )
