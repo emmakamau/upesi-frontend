@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { Navbar } from "../components/Navbar";
 import TransferCash from "../components/TransferCash";
 import WithdrawAtm from "../components/WithdrawAtm";
-import { TransactionsTable } from "../components/TransactionsTable";
 
 export class ClientPortal extends Component {
     render() {
@@ -15,7 +14,6 @@ export class ClientPortal extends Component {
                     <WithdrawAtm />
                 </div>
                 <div className="p-4">
-                    <TransactionsTable />
                 </div>
             </div>
         )

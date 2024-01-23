@@ -25,11 +25,10 @@ export class Navbar extends Component {
                                 )}
 
                                 {/* Links for Staff */}
-                                {userRole === "Staff" && (
+                                {userRole === "AccountManager" && (
                                     <>
                                         <NavLink to="/register/client" className="link mx-2 px-2 hover:text-white-900">Client Registration</NavLink>
                                         <NavLink to="/register/accountmanager" className="mx-2 px-2 hover:text-white-900 link">Staff Registration</NavLink>
-                                        <NavLink to="/register/client" className="mx-2 px-2 hover:text-white-900 link">Client Registration</NavLink>
                                     </>
                                 )}
                             </nav>
