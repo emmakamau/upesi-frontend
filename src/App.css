@@ -45,6 +45,7 @@ header{
   font-weight: bolder;
   font-family: cursive;
   text-decoration-line: underline;
+  text-underline-offset: 0.5em;
 }
 
 @keyframes App-logo-spin {

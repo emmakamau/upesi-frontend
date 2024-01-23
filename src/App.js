@@ -8,7 +8,7 @@ import Login from './pages/Login';
 import RegisterClient from './pages/RegisterClient';
 import RegisterAccountManager from './pages/RegisterAccountManager';
 
-import { Portal } from './pages/Portal';
+import { StaffPortal } from './pages/StaffPortal';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Route path='/register/client' element={<RegisterClient />} />
         <Route path='/register/accountmanager' element={<RegisterAccountManager />} />
 
-        <Route path='/portal' element={<Portal />} />
+        <Route path='/staffportal' element={<StaffPortal />} />
       
       </Routes>
     </Router>
