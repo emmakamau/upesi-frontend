@@ -4,7 +4,7 @@ import API_ENDPOINT from './appConfig';
 
 import 'tailwindcss/tailwind.css';
 
-export default class RegisterAccountManager extends Component {
+export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +26,7 @@ export default class RegisterAccountManager extends Component {
 
             // Replace 'your_api_endpoint_here' with your actual API endpoint
             const response = await axios.post(
-                `${API_ENDPOINT}/api/User/RegisterNewClient`,
+                `${API_ENDPOINT}/login`,
                 requestBody
             );
 
@@ -53,7 +53,7 @@ export default class RegisterAccountManager extends Component {
             <div className="flex min-h-screen items-center justify-center">
                 <div className="relative flex flex-col rounded-xl bg-transparent bg-clip-border text-gray-700 shadow-none">
                     <h4 className="block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-                        Sign Up Staff Account
+                        Sign In
                     </h4>
                     <form onSubmit={this.handleSubmit} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
                         <div className="mb-4 flex flex-col gap-6">
@@ -89,7 +89,7 @@ export default class RegisterAccountManager extends Component {
                             type="submit"
                             data-ripple-light="true"
                         >
-                            Register
+                            Sign In
                         </button>
                     </form>
 

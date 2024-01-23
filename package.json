@@ -3,15 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.11.3",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.5",
+    "mdb-react-ui-kit": "^5.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.3",
+    "react-icons": "^4.7.1",
+    "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
-    "tailwindcss": "^3.4.1",
+    "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -38,5 +44,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "."
+  "devDependencies": {
+    "tailwindcss": "^3.2.4"
+  }
 }

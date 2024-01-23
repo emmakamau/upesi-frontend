@@ -28,6 +28,25 @@
   color: #61dafb;
 }
 
+header{
+  background-color: black;
+}
+
+.link{
+  text-decoration: none;
+  padding: 1em;
+  color: white;
+}
+
+.home-link{
+  text-decoration: wavy;
+  color: whitesmoke;
+  font-size: xx-large;
+  font-weight: bolder;
+  font-family: cursive;
+  text-decoration-line: underline;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
