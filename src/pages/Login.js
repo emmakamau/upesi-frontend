@@ -37,6 +37,7 @@ const Login = () => {
 
             sessionStorage.setItem('userId', userInfoResponse.data.userId);
             sessionStorage.setItem('role', userInfoResponse.data.role);
+            sessionStorage.setItem('userName', userInfoResponse.data.userName);
 
             userInfoResponse.data.role === "Client" ? navigate('/clientportal') : navigate('/staffportal');
         } catch (error) {

@@ -28,6 +28,7 @@
   color: #61dafb;
 }
 
+
 header{
   background-color: black;
 }
@@ -47,6 +48,41 @@ header{
   text-decoration-line: underline;
   text-underline-offset: 0.5em;
 }
+
+.accordion-item{
+  height: 3em;
+  width: 60%;
+  font-size: xx-large;
+  text-align: center;
+  font-weight: bold;
+  padding: 0.5em;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: row; /* Makes it a row on large screens */
+  flex-wrap: wrap; /* Allows items to wrap onto the next line on small screens */
+}
+
+@media (max-width: 768px) {
+  .main-content {
+      flex-direction: column; /* Stacks the items in a column on small screens */
+  }
+}
+
+/* Optional: You may want to add some padding or margins to your columns for spacing */
+.main-content > div {
+  flex-basis: 50%; /* Each child takes up 50% of the width on large screens */
+  padding: 10px; /* Add some space around the items */
+}
+
+@media (max-width: 768px) {
+  .main-content > div {
+      flex-basis: 100%; /* Each child takes up 100% of the width on small screens */
+  }
+}
+
+
 
 @keyframes App-logo-spin {
   from {
