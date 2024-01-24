@@ -14,7 +14,7 @@ const Transactions = ({ userId }) => {
     const fetchTransactions = async () => {
       setIsLoading(true);
       try {
-        const endpoint = userId 
+        const endpoint = userId
           ? `${API_ENDPOINT}/api/Transactions/ListTransactions?userId=${userId}` // API endpoint to fetch transactions for a specific user
           : `${API_ENDPOINT}/api/Transactions/ListTransactions`;
         const response = await axios.get(endpoint);
@@ -46,17 +46,21 @@ const Transactions = ({ userId }) => {
   }
 
   return (
-    <div className='mt-4 px-4'>
-      <Input
-        label="Search"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <Table
-        tableHead={["Id", "Description", "Amount"]}
-        tableRows={filteredTransactions}
-        renderRow={renderRow}
-      />
+    <div className='mt-4 px-4 flex flex-col text-center justify-center'>
+      <div className='mt-4 max-w-screen bg-gray-100 p-4'>
+        <Input
+          variant="static"
+          placeholder='Search'
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <Table
+          tableHead={["Id", "Description", "Amount"]}
+          tableRows={filteredTransactions}
+          renderRow={renderRow}
+        />
+      </div>
+
     </div>
   );
 };

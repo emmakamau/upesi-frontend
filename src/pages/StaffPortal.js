@@ -13,18 +13,19 @@ export class StaffPortal extends Component {
         return (
             <div>
                 <Navbar />
-                <div className="mt-4">
-                    <div>
-                        <h3>Logged In: {this.userName}</h3>
+                <div className="container mx-auto p-4 bg-gray-200">
+                    <h3 className="text-lg mb-4 italic font-bold">Hello, {this.userName}</h3>
+                    <div className="flex mt-4 justify-center">
+                        <NavTab
+                            tabsData={[
+                                { label: "ATMs", value: "atms", content: <ATM /> },
+                                { label: "Client Accounts", value: "client_accounts", content: <SavingsAccount /> },
+                                { label: "Transactions", value: "transactions", content: <Transactions /> }
+                            ]} />
                     </div>
-                    <NavTab
-                        tabsData={[
-                            { label: "ATMs", value: "atms", content: <ATM />},
-                            { label: "Client Accounts", value: "client_accounts", content: <SavingsAccount />},
-                            { label: "Transactions", value: "transactions", content: <Transactions />}
-                        ]} />
                 </div>
             </div>
+
         )
     }
 }

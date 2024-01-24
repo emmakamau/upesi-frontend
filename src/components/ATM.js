@@ -9,7 +9,7 @@ export class ATM extends Component {
     render() {
         return (
             <div>
-                <div className="mt-4">
+                <div className="mt-4 max-w-screen bg-gray-100">
                     <NavTab
                         tabsData={[
                             { label: "Add New ATM", value: "new_atm", content: <AddATM /> },

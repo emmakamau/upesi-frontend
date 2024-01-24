@@ -8,7 +8,7 @@ export class SavingsAccount extends Component {
     render() {
         return (
             <div>
-                <div className="mt-4">
+                <div className="mt-4 max-w-screen bg-gray-100">
                     <NavTab
                         tabsData={[
                             { label: "Add New Savings Account", value: "new_savings_account", content: <CreateSavingsAccount /> },

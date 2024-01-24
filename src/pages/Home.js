@@ -16,7 +16,7 @@ class Home extends Component {
                     UPESI
                 </h1><br /><br />
 
-                <Link to="/login" class="inline-block text-white font-bold py-2 px-4 mt-4 rounded-full bg-gradient-to-r from-gray-900 via-gray-500 to-gray-100 border border-transparent transform hover:scale-110 hover:border-white transition-transform duration-3000 ease-in-out">
+                <Link to="/login" class="inline-block text-white font-bold py-2 px-4 mt-4 rounded-full bg-white-900 border border-transparent transform hover:scale-110 hover:border-white transition-transform duration-3000 ease-in-out">
                     Login to your Account
                 </Link>
             </div>

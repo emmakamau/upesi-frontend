@@ -23,7 +23,7 @@ const LoadATM = () => {
                 })));
             } catch (error) {
                 setMessage('Error fetching ATMs: ' + error.message);
-            } 
+            }
         };
 
         fetchAtmList();
@@ -50,9 +50,10 @@ const LoadATM = () => {
     };
 
     return (
-        <div className="flex min-h-screen mt-4 justify-center">
-            <div className="relative flex flex-col rounded-xl bg-transparent bg-clip-border text-gray-700 shadow-none">
-                <form onSubmit={loadATM}>
+        <div className="flex mt-4 justify-center">
+            <div className="w-full max-w-md p-6 bg-white rounded-lg border border-gray-200 shadow-md">
+                <h5 className="text-xl font-medium mb-6">Load ATM</h5>
+                <form onSubmit={loadATM} className="space-y-6">
                     <div>
                         <Label name="Select ATM" />
                         <DropDown
@@ -68,9 +69,15 @@ const LoadATM = () => {
                     </div>
                     <SubmitButton name="Submit" />
                 </form>
-                {message && <p className='mt-2'>{message}</p>}
+                {message && (
+                    <div className="mt-3 text-center text-sm font-medium p-2.5 
+                            text-green-800 bg-green-100 rounded-lg">
+                        {message}
+                    </div>
+                )}
             </div>
         </div>
+
     );
 };
 

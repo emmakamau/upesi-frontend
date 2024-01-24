@@ -39,37 +39,38 @@ export class AddATM extends Component {
     }
 
     render() {
+        const { location, balance, successMessage } = this.state;
         return (
-            <div className="flex min-h-screen mt-4 justify-center">
-                <div className="relative flex flex-col rounded-xl bg-transparent bg-clip-border text-gray-700 shadow-none">
-                    <form onSubmit={this.handleSubmit}>
-                        <div className='p-1'>
-                            <Label name="Location" />
-                            <Input
-                                type="text"
-                                name="location"
-                                value={this.state.location}
-                                onChange={this.handleInputChange}></Input>
-                        </div>
-                        <div className='p-1'>
-                            <Label name="Amount" />
-                            <Input
-                                type="number"
-                                name="balance"
-                                value={this.state.balance}
-                                onChange={this.handleInputChange}
-                                required></Input>
-                        </div>
-                        <SubmitButton name="Save" />
-                    </form>
-                    {this.state.successMessage && (
-                        <div className="mt-3 text-center">
-                            {this.state.successMessage}
-                        </div>
-                    )}
-                </div>
-
+            <div className="flex mt-4 justify-center">
+            <div className="w-full max-w-md p-6 bg-white rounded-lg border border-gray-200 shadow-md">
+                <h5 className="text-xl font-medium mb-6">Add New ATM</h5>
+                <form onSubmit={this.handleSubmit} className="space-y-6">
+                    <div>
+                        <Label name="Location" />
+                        <Input
+                            type="text"
+                            name="location"
+                            value={location}
+                            onChange={this.handleInputChange}></Input>
+                    </div>
+                    <div>
+                        <Label name="Amount" />
+                        <Input
+                            type="number"
+                            name="balance"
+                            value={balance}
+                            onChange={this.handleInputChange}
+                            required></Input>
+                    </div>
+                    <SubmitButton name="Save" />
+                </form>
+                {successMessage && (
+                    <div className="mt-3 text-center text-sm font-medium p-2.5 text-green-800 bg-green-100 rounded-lg">
+                        {successMessage}
+                    </div>
+                )}
             </div>
+        </div>
         )
     }
 }

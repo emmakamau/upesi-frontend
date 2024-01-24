@@ -62,7 +62,7 @@ const CreateSavingsAccount = () => {
     };
 
     return (
-        <div className="flex min-h-screen mt-4 justify-center">
+        <div className="flex mt-4 justify-center">
             <div className="p-4 relative flex flex-col rounded-xl bg-white text-gray-700 shadow-lg">
                 <form onSubmit={handleSubmit}>
                     <div className='p-1'>
