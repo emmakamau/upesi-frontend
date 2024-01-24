@@ -21,7 +21,7 @@ const LoadATM = () => {
                 const response = await axios.get(`${API_ENDPOINT}/api/ATM/ListAtms`);
                 setAtmList(response.data.map(atm => ({
                     value: atm.id,
-                    label: `${atm.location} - ${atm.id}`
+                    label: `${atm.location}`
                 })));
             } catch (error) {
                 setMessage('Error fetching ATMs: ' + error.message);
@@ -45,7 +45,7 @@ const LoadATM = () => {
         event.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.put(`${API_ENDPOINT}/api/ATM/LoadAtm?id=${atmId}&amount=${parseFloat(amount)}`);
+            await axios.put(`${API_ENDPOINT}/api/ATM/LoadAtm?id=${atmId}&amount=${parseFloat(amount)}`);
             setMessage("ATM Loaded successfully!");
             setAmount('');
             setAtmId('');

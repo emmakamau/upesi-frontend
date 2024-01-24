@@ -5,6 +5,7 @@ import { NavTab } from "../components/NavTab";
 import Transactions from "../components/Transactions";
 
 import { ATM } from "../components/ATM";
+import { SavingsAccount } from "../components/SavingsAccounts";
 
 export class StaffPortal extends Component {
     render() {
@@ -15,7 +16,7 @@ export class StaffPortal extends Component {
                     <NavTab
                         tabsData={[
                             { label: "ATMs", value: "atms", content: <ATM />},
-                            { label: "Client Accounts", value: "client_accounts", content: <></>},
+                            { label: "Client Accounts", value: "client_accounts", content: <SavingsAccount />},
                             { label: "Transactions", value: "transactions", content: <Transactions />}
                         ]} />
                 </div>

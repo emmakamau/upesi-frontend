@@ -83,6 +83,14 @@ header{
 }
 
 
+.active-tab {
+  color: grey;
+  text-decoration-line: underline;
+  font-size: larger !important;
+  border-radius: 1px;
+}
+
+
 
 @keyframes App-logo-spin {
   from {

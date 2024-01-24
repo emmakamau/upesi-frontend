@@ -7,7 +7,7 @@ import {
   TabPanel,
 } from "@material-tailwind/react";
 
-export function NavTab({ tabsData }) {
+export function NavTab ({ tabsData }) {
   // Ensure there's a default tab selected if none is specified
   const defaultTab = tabsData.length > 0 ? tabsData[0].value : '';
 
