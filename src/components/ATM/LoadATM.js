@@ -10,13 +10,11 @@ import DropDown from '../DropDown';
 const LoadATM = () => {
     const [amount, setAmount] = useState('');
     const [atmId, setAtmId] = useState('');
-    const [loading, setLoading] = useState(false);
     const [atmList, setAtmList] = useState([]);
     const [message, setMessage] = useState('');
 
     useEffect(() => {
         const fetchAtmList = async () => {
-            setLoading(true);
             try {
                 const response = await axios.get(`${API_ENDPOINT}/api/ATM/ListAtms`);
                 setAtmList(response.data.map(atm => ({
@@ -25,9 +23,7 @@ const LoadATM = () => {
                 })));
             } catch (error) {
                 setMessage('Error fetching ATMs: ' + error.message);
-            } finally {
-                setLoading(false);
-            }
+            } 
         };
 
         fetchAtmList();
@@ -43,7 +39,6 @@ const LoadATM = () => {
 
     const loadATM = async (event) => {
         event.preventDefault();
-        setLoading(true);
         try {
             await axios.put(`${API_ENDPOINT}/api/ATM/LoadAtm?id=${atmId}&amount=${parseFloat(amount)}`);
             setMessage("ATM Loaded successfully!");
@@ -51,8 +46,6 @@ const LoadATM = () => {
             setAtmId('');
         } catch (error) {
             setMessage('Error loading ATM: ' + error.response?.data?.message || error.message);
-        } finally {
-            setLoading(false);
         }
     };
 

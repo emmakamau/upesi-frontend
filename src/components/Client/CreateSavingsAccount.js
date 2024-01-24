@@ -9,7 +9,7 @@ import Input from "../Input";
 
 const CreateSavingsAccount = () => {
     const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState('');
     const [depositAmount, setDepositAmount] = useState(0);
     const [message, setMessage] = useState('');
@@ -25,10 +25,8 @@ const CreateSavingsAccount = () => {
                     label: `${user.userName}`
                 })));
             } catch (error) {
-                setMessage('Error fetching ATMs: ' + error.message);
-            } finally {
-                setLoading(false);
-            }
+                setMessage('Error fetching Users: ' + error.message);
+            } 
         };
 
         fetchUsersList();
@@ -49,14 +47,18 @@ const CreateSavingsAccount = () => {
             depositAmount: parseFloat(depositAmount),
         };
 
-        try{
+        try {
             // Send payload to your backend
-        console.log('Submitting', payload);
-        const response = await axios.post(`${API_ENDPOINT}/api/SavingsAccount/CreateSavingsAccount`, payload);
-        console.log('Response', response);
+            console.log('Submitting', payload);
+            const response = await axios.post(`${API_ENDPOINT}/api/SavingsAccount/CreateSavingsAccount`, payload);
+            console.log('Response', response);
+            setMessage("Account created successfully");
+            // Reset form fields
+            setSelectedUserId('');
+            setDepositAmount(0);
         }
-        catch (err) {console.error("Error", err);}
-        
+        catch (err) { console.error("Error", err); setMessage("Error", err) }
+
     };
 
     return (
@@ -81,7 +83,7 @@ const CreateSavingsAccount = () => {
                             onChange={handleAmountChange}
                             required></Input>
                     </div>
-                    <SubmitButton name="Create"/>
+                    <SubmitButton name="Create" />
                 </form>
                 {message && <p className='mt-2'>{message}</p>}
             </div>

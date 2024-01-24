@@ -15,8 +15,8 @@ const Transactions = ({ userId }) => {
       setIsLoading(true);
       try {
         const endpoint = userId 
-          ? `${API_ENDPOINT}/api/Transactions/ListTransactions/${userId}` // API endpoint to fetch transactions for a specific user
-          : `${API_ENDPOINT}/api/Transactions/ListTransactions`; // API endpoint to fetch all transactions
+          ? `${API_ENDPOINT}/api/Transactions/ListTransactions?userId=${userId}` // API endpoint to fetch transactions for a specific user
+          : `${API_ENDPOINT}/api/Transactions/ListTransactions`;
         const response = await axios.get(endpoint);
         setTransactions(response.data);
       } catch (error) {
@@ -30,16 +30,14 @@ const Transactions = ({ userId }) => {
   }, [userId]);
 
   const filteredTransactions = transactions.filter(
-    transaction => transaction.name.toLowerCase().includes(searchQuery.toLowerCase())
+    transaction => transaction.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const renderRow = (transaction, index) => (
-    <tr key={index}>
-      <td>{transaction.id}</td>
-      <td>{transaction.userId}</td>
-      <td>{transaction.description}</td>
-      <td>{transaction.timestamp}</td>
-      <td>{transaction.amount}</td>
+  const renderRow = (transaction) => (
+    <tr key={transaction.id}>
+      <td className='border-y border-blue-gray-100 bg-blue-gray-50/50 p-4'>{transaction.id}</td>
+      <td className='border-y border-blue-gray-100 bg-blue-gray-50/50 p-4'>{transaction.description}</td>
+      <td className='border-y border-blue-gray-100 bg-blue-gray-50/50 p-4'>{transaction.amount}</td>
     </tr>
   );
 
@@ -55,7 +53,7 @@ const Transactions = ({ userId }) => {
         onChange={(e) => setSearchQuery(e.target.value)}
       />
       <Table
-        tableHead={["Id", "User", "Description", "Amount", "TimeStamp"]}
+        tableHead={["Id", "Description", "Amount"]}
         tableRows={filteredTransactions}
         renderRow={renderRow}
       />

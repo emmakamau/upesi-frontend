@@ -16,7 +16,6 @@ export class Navbar extends Component {
                             <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
                                 <NavLink to="/" className="mx-2 px-2 hover:text-white-900 link">Home</NavLink>
 
-
                                 {/* Links for Client */}
                                 {userRole === "Client" && (
                                     <>
@@ -31,6 +30,8 @@ export class Navbar extends Component {
                                         <NavLink to="/register/accountmanager" className="mx-2 px-2 hover:text-white-900 link">Staff Registration</NavLink>
                                     </>
                                 )}
+
+                                <NavLink to="/login" className="mx-2 px-2 hover:text-white-900 link">Login</NavLink>
                             </nav>
                         </div>
                     </header>

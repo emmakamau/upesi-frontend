@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import API_ENDPOINT from '../pages/appConfig'
+import API_ENDPOINT from '../pages/appConfig';
 
 import Label from './Label';
 import Input from './Input';
@@ -15,48 +15,55 @@ const transactionFeeStructure = [
     { min: 50001, max: 1000000000000, fee: 50 }
 ];
 
-class TransferCash extends Component {
-    state = {
-        transferToOptions: [],  // Options for the transferTo dropdown
-        transferTo: '',
-        description: '',
-        amount: 0,
-        transactionFee: 0,
-        response: null
-    };
+const TransferCash = () => {
+    const [transferToOptions, setTransferToOptions] = useState([]);
+    const [transferTo, setTransferTo] = useState('');
+    const [description, setDescription] = useState('');
+    const [amount, setAmount] = useState(0);
+    const [transactionFee, setTransactionFee] = useState(0);
+    const [response, setResponse] = useState(null);
 
-    componentDidMount() {
-        this.fetchTransferToOptions();
-    }
+    useEffect(() => {
+        const fetchTransferToOptions = async () => {
+            try {
+                const response = await axios.get(`${API_ENDPOINT}/api/SavingsAccount/ListSavingsAccounts`);
+                setTransferToOptions(response.data.map(user => ({
+                    value: user.userId,
+                    label: `${user.userName}`
+                })));
+            } catch (error) {
+                console.error("Error fetching transfer options:", error);
+            }
+        };
 
-    fetchTransferToOptions = async () => {
-        try {
-            // API endpoint to fetch transferTo options
-            const response = await axios.post(`${API_ENDPOINT}/api/SavingsAccount/ListSavingsAccounts`);
-            this.setState({ transferToOptions: response.data });
-        } catch (error) {
-            console.error("Error fetching transfer options:", error);
+        fetchTransferToOptions();
+    }, []);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        switch (name) {
+            case 'transferTo':
+                setTransferTo(value);
+                break;
+            case 'description':
+                setDescription(value);
+                break;
+            case 'amount':
+                setAmount(value);
+                calculateTransactionFee(value);
+                break;
+            default:
+                break;
         }
     };
 
-    handleInputChange = (e) => {
-        const { name, value } = e.target;
-        this.setState({ [name]: value }, () => {
-            if (name === 'amount') {
-                this.calculateTransactionFee();
-            }
-        });
-    };
-
-    calculateTransactionFee = () => {
-        const { amount } = this.state;
+    const calculateTransactionFee = (amount) => {
         const fee = transactionFeeStructure.find(range => amount >= range.min && amount <= range.max)?.fee || 0;
-        this.setState({ transactionFee: fee });
+        setTransactionFee(fee);
     };
 
-    handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const { transferTo, description, amount, transactionFee } = this.state;
         const transferFrom = sessionStorage.getItem('userId');
 
         try {
@@ -68,55 +75,51 @@ class TransferCash extends Component {
                 transactionFee
             });
             console.log(response.data);
-            // Handle response (e.g., show success message, clear form)
+            setResponse("Withdrawal successfully completed");
+
+            // Reset form fields after successful transfer
+            setTransferTo('');
+            setDescription('');
+            setAmount(0);
         } catch (error) {
-            console.error("Error during the transfer:", error);
-            // Handle error (e.g., show error message)
+            console.error("Error during the transfer:", error.message);
+            setResponse(error.response.data); 
         }
     };
 
-    renderTransferToOptions = () => {
-        return this.state.transferToOptions.map((option, index) => (
-            <option key={index} value={option.value}>{option.label}</option>
-        ));
-    };
-
-    render() {
-        const { transferTo, description, amount } = this.state;
-
-        return (
-            <div className=''>
-                <h2 className='text-center font-bold mb-2'>Transfer Funds</h2>
-                <form onSubmit={this.handleSubmit}>
-                    <div className='p-1'>
-                        <Label name="Transfer To" />
-                        <DropDown 
-                            name="transferTo"
-                            value={transferTo}
-                            onChange={this.handleInputChange}
-                            options={this.renderTransferToOptions()}
-                            placeholder="Select a recipient"/>
-                    </div>
-                    <div className='p-1'>
-                        <Label name="Description" />
-                        <Input type="text"
-                            name="description"
-                            value={description}
-                            onChange={this.handleInputChange}></Input>
-                    </div>
-                    <div className='p-1'>
-                        <Label name="Amount" />
-                        <Input type="number"
-                            name="amount"
-                            value={amount}
-                            onChange={this.handleInputChange}
-                            required></Input>
-                    </div>
-                    <SubmitButton name="Transfer" />
-                </form>
-            </div>
-        );
-    }
-}
+    return (
+        <div>
+            <h2 className='text-center font-bold mb-2'>Transfer Funds</h2>
+            <form onSubmit={handleSubmit}>
+                <div className='p-1'>
+                    <Label name="Transfer To" />
+                    <DropDown 
+                        name="transferTo"
+                        value={transferTo}
+                        onChange={handleInputChange}
+                        options={transferToOptions}
+                        placeholder="Select a recipient"/>
+                </div>
+                <div className='p-1'>
+                    <Label name="Description" />
+                    <Input type="text"
+                        name="description"
+                        value={description}
+                        onChange={handleInputChange}></Input>
+                </div>
+                <div className='p-1'>
+                    <Label name="Amount" />
+                    <Input type="number"
+                        name="amount"
+                        value={amount}
+                        onChange={handleInputChange}
+                        required></Input>
+                </div>
+                <SubmitButton name="Transfer" />
+            </form>
+            {response && <p className='mt-2 text-center'>{response}</p>}
+        </div>
+    );
+};
 
 export default TransferCash;

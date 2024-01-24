@@ -16,7 +16,7 @@ const RegisterClient = () => {
         try {
             const requestBody = { email, password };
             const response = await axios.post(
-                `${API_ENDPOINT}/api/User/RegisterClient`,
+                `${API_ENDPOINT}/api/User/RegisterNewClient`,
                 requestBody
             );
             setResponse(response.data);

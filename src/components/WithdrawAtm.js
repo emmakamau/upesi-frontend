@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import API_ENDPOINT from '../pages/appConfig'
+import API_ENDPOINT from '../pages/appConfig';
 
 import Label from './Label';
 import Input from './Input';
@@ -15,48 +15,55 @@ const transactionFeeStructure = [
     { min: 50001, max: 1000000000000, fee: 60 }
 ];
 
-class WithdrawAtm extends Component {
-    state = {
-        atmList: [],
-        atmId: '',
-        description: '',
-        amount: 0,
-        transactionFee: 0,
-        response: null
-    };
+const WithdrawAtm = () => {
+    const [atmList, setAtmList] = useState([]);
+    const [atmId, setAtmId] = useState('');
+    const [description, setDescription] = useState('');
+    const [amount, setAmount] = useState(0);
+    const [transactionFee, setTransactionFee] = useState(0);
+    const [message, setMessage] = useState('');
 
-    componentDidMount() {
-        this.fetchTransferToOptions();
-    }
+    useEffect(() => {
+        const fetchAtms = async () => {
+            try {
+                const response = await axios.get(`${API_ENDPOINT}/api/Atm/ListAtms`);
+                setAtmList(response.data.map(atm => ({
+                    value: atm.id,
+                    label: `${atm.location}`
+                })));
+            } catch (error) {
+                console.error("Error fetching ATMs", error);
+                setMessage("Error fetching ATMs: " + error.message);
+            }
+        };
 
-    fetchTransferToOptions = async () => {
-        try {
-            // API endpoint to fetch transferTo options
-            const response = await axios.post(`${API_ENDPOINT}/api/Atm/ListAtms`);
-            this.setState({ transferToOptions: response.data });
-        } catch (error) {
-            console.error("Error fetching ATMs", error);
+        fetchAtms();
+    }, []);
+
+    const handleInputChange = (name, value) => {
+        switch (name) {
+            case 'amount':
+                setAmount(value);
+                calculateTransactionFee(value);
+                break;
+            case 'description':
+                setDescription(value);
+                break;
+            case 'atmId':
+                setAtmId(value);
+                break;
+            default:
+                break;
         }
     };
 
-    handleInputChange = (e) => {
-        const { name, value } = e.target;
-        this.setState({ [name]: value }, () => {
-            if (name === 'amount') {
-                this.calculateTransactionFee();
-            }
-        });
-    };
-
-    calculateTransactionFee = () => {
-        const { amount } = this.state;
+    const calculateTransactionFee = (amount) => {
         const fee = transactionFeeStructure.find(range => amount >= range.min && amount <= range.max)?.fee || 0;
-        this.setState({ transactionFee: fee });
+        setTransactionFee(fee);
     };
 
-    handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const { atmId, description, amount, transactionFee } = this.state;
         const userId = sessionStorage.getItem('userId');
 
         try {
@@ -68,55 +75,51 @@ class WithdrawAtm extends Component {
                 transactionFee
             });
             console.log(response.data);
-            // Handle response (e.g., show success message, clear form)
+            setMessage("Withdrawal successfully completed");
+
+            // Reset form fields
+            setAtmId('');
+            setDescription('');
+            setAmount(0);
         } catch (error) {
             console.error("Error during the transfer:", error);
-            // Handle error (e.g., show error message)
+            setMessage(error.response.data);
         }
     };
 
-    renderAtmOptions = () => {
-        return this.state.atmList.map((option, index) => (
-            <option key={index} value={option.value}>{option.label}</option>
-        ));
-    };
-
-    render() {
-        const { atmList, description, amount } = this.state;
-
-        return (
-            <div className=''>
-                <h2 className='text-center font-bold mb-2'>ATM Withdrawal</h2>
-                <form onSubmit={this.handleSubmit}>
-                    <div className='p-1'>
-                        <Label name="ATMs" />
-                        <DropDown 
-                            name="atmList"
-                            value={atmList}
-                            onChange={this.handleInputChange}
-                            options={this.renderAtmOptions()}
-                            placeholder="Select an ATM"/>
-                    </div>
-                    <div className='p-1'>
-                        <Label name="Description" />
-                        <Input type="text"
-                            name="description"
-                            value={description}
-                            onChange={this.handleInputChange}></Input>
-                    </div>
-                    <div className='p-1'>
-                        <Label name="Amount" />
-                        <Input type="number"
-                            name="amount"
-                            value={amount}
-                            onChange={this.handleInputChange}
-                            required></Input>
-                    </div>
-                    <SubmitButton name="Withdraw" />
-                </form>
-            </div>
-        );
-    }
+    return (
+        <div>
+            <h2 className='text-center font-bold mb-2'>ATM Withdrawal</h2>
+            <form onSubmit={handleSubmit}>
+                <div className='p-1'>
+                    <Label name="ATMs" />
+                    <DropDown
+                        name="atmId"
+                        value={atmId}
+                        onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                        options={atmList}
+                        placeholder="Select an ATM" />
+                </div>
+                <div className='p-1'>
+                    <Label name="Description" />
+                    <Input type="text"
+                        name="description"
+                        value={description}
+                        onChange={(e) => handleInputChange(e.target.name, e.target.value)} />
+                </div>
+                <div className='p-1'>
+                    <Label name="Amount" />
+                    <Input type="number"
+                        name="amount"
+                        value={amount}
+                        onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                        required />
+                </div>
+                <SubmitButton name="Withdraw" />
+            </form>
+            {message && <p className='mt-2 text-center'>{message}</p>}
+        </div>
+    );
 }
 
 export default WithdrawAtm;
